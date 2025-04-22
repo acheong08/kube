@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: vaultwarden
+  namespace: vaultwarden
+spec:
+  clusterIP: None
+  selector:
+    app: vaultwarden
+  ports:
+  - port: 80
+    name: http
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: vaultwarden-pvc
+  namespace: vaultwarden
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: longhorn
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vaultwarden
+  namespace: vaultwarden
+  labels:
+    app: vaultwarden
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vaultwarden # has to match .spec.template.metadata.labels
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: vaultwarden
+    spec:
+      restartPolicy: Always
+      containers:
+      - name: vaultwarden
+        image: vaultwarden/server:latest
+        ports:
+        - containerPort: 80
+          name: http
+        volumeMounts:
+        - name: vaultwarden-volume
+          mountPath: /data
+      volumes:
+      - name: vaultwarden-volume
+        persistentVolumeClaim:
+          claimName: vaultwarden-pvc

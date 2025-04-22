@@ -7,7 +7,7 @@ metadata:
     spec.ingressClassName: caddy
 spec:
   rules:
-  - host: kube.duti.dev
+  - host: kube-longhorn.duti.dev
     http:
       paths:
       - path: /
