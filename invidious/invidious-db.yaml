@@ -50,6 +50,14 @@ spec:
             - name: init-script
               mountPath: /docker-entrypoint-initdb.d/init-invidious-db.sh
               subPath: init-invidious-db.sh
+      volumes:
+        - name: sql-config
+          configMap:
+            name: sql-config
+        - name: init-script
+          configMap:
+            name: init-script
+            defaultMode: 0755  # Make script executable
   volumeClaimTemplates:
     - metadata:
         name: postgresdata
@@ -60,13 +68,3 @@ spec:
         resources:
           requests:
             storage: 1Gi
-  volumes:
-    - name: sql-config
-      hostPath:
-        path: ./config/sql
-        type: Directory
-    - name: init-script
-      hostPath:
-        path: ./init-invidious-db.sh
-        type: File
-
