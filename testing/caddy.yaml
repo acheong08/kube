@@ -1,0 +1,83 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-production
+    spec.ingressClassName: traefik
+  labels:
+    app: testing
+  name: testing-ingress
+  namespace: testing
+spec:
+  rules:
+  - host: testing.duti.dev
+    http:
+      paths:
+      - backend:
+          service:
+            name: caddy
+            port: 
+              number: 80
+        path: /
+        pathType: Prefix  
+  tls:
+  - hosts:
+    - testing.duti.dev
+    secretName: testing-tls
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: caddy-config
+  namespace: testing
+data:
+  Caddyfile: |
+    :80 {
+        respond "Hello world!"
+    }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: caddy
+  namespace: testing
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: caddy
+  template:
+    metadata:
+      labels:
+        app: caddy
+    spec:
+      nodeSelector:
+        cloud: digitalocean
+      containers:
+      - name: caddy
+        image: caddy:latest
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: caddy-config-volume
+          mountPath: /etc/caddy
+      volumes:
+      - name: caddy-config-volume
+        configMap:
+          name: caddy-config
+          items:
+          - key: Caddyfile
+            path: Caddyfile
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: caddy
+  namespace: testing
+spec:
+  type: ClusterIP
+  selector:
+    app: caddy
+  ports:
+    - port: 80
+      targetPort: 80
