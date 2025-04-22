@@ -1,22 +1,29 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-production
+    kubernetes.io/ingress.class: traefik
+  labels:
+    app: longhorn
   name: longhorn-ingress
   namespace: longhorn-system
-  annotations:
-    spec.ingressClassName: caddy
 spec:
   rules:
   - host: kube-longhorn.duti.dev
     http:
       paths:
-      - path: /
-        pathType: Prefix
-        backend:
+      - backend:
           service:
             name: caddy
             port:
               number: 80
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - kube-longhorn.duti.dev
+    secretName: longhorn-tls
 ---
 apiVersion: v1
 kind: ConfigMap

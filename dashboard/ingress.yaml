@@ -1,22 +1,29 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-production
+    kubernetes.io/ingress.class: traefik
+  labels:
+    app: dashboard
   name: dashboard-ingress
   namespace: kubernetes-dashboard
-  annotations:
-    spec.ingressClassName: caddy
 spec:
   rules:
   - host: kube-dashboard.duti.dev
     http:
       paths:
-      - path: /
-        pathType: Prefix
-        backend:
+      - backend:
           service:
             name: caddy
             port:
               number: 80
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - kube-dashboard.duti.dev
+    secretName: dashboard-tls
 ---
 apiVersion: v1
 kind: ConfigMap

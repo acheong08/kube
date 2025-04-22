@@ -1,22 +1,29 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-production
+    kubernetes.io/ingress.class: traefik
+  labels:
+    app: calendar
   name: calendar-ingress
   namespace: calendar
-  annotations:
-    spec.ingressClassName: caddy
 spec:
   rules:
   - host: calendar.duti.dev
     http:
       paths:
-      - path: /
-        pathType: Prefix
-        backend:
+      - backend:
           service:
             name: caddy
-            port:
+            port: 
               number: 80
+        path: /
+        pathType: Prefix  
+  tls:
+  - hosts:
+    - calendar.duti.dev
+    secretName: calendar-tls
 ---
 apiVersion: v1
 kind: ConfigMap
