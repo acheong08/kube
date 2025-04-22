@@ -12,3 +12,8 @@ kubectl create configmap sql-config \
   --dry-run=client \
   -o yaml > sql-configmap.yaml
 ```
+```
+kubectl create configmap invidious-companion-config \
+  --namespace=invidious \
+  --from-file=config/companion.yaml
+```
