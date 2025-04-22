@@ -11,6 +11,7 @@ data:
                 kube $2a$14$hovE7N8ydaVvrHFe6A4APOQeaRME30KvkYjjXEU7VP3.MAgHrUp8K
             }
             reverse_proxy kubernetes-dashboard-kong-proxy:443 {
+                header_up authorization "Bearer {env.BEARER_TOKEN}"
                 transport http {
                     tls
                     tls_insecure_skip_verify
@@ -41,6 +42,12 @@ spec:
         image: caddy:latest
         ports:
         - containerPort: 80
+        env:
+        - name: BEARER_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: admin-user
+              key: token
         volumeMounts:
         - name: caddy-config-volume
           mountPath: /etc/caddy
