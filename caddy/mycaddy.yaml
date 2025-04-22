@@ -42,7 +42,7 @@ data:
   acmeEABKeyId: ""
   acmeEABMacKey: ""
   debug: "false"
-  email: ""
+  email: "acheong@duti.dev"
   experimentalSmartSort: "false"
   metrics: "true"
   onDemandTLS: "false"

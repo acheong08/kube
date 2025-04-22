@@ -26,8 +26,11 @@ metadata:
 data:
   Caddyfile: |
     :80 {
+        basic_auth {
+            acheong $2a$14$4qPa0XVWb0/ABAoY/iPec.09.R5HSO7qGK7DsjuB1G8L9FJwIg2xu
+        }
         route {
-            reverse_proxy calendar:80
+            reverse_proxy calendar:8000
         }
     }
 ---

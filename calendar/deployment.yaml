@@ -8,8 +8,8 @@ spec:
   selector:
     app: calendar
   ports:
-    - port: 80
-      targetPort: 8080
+    - port: 8000
+      targetPort: 8000
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -29,13 +29,16 @@ spec:
     metadata:
       labels:
         app: calendar
-    spec:
+    spec:      
+      securityContext:
+        runAsUser: 1000
+        fsGroup: 1000
       restartPolicy: Always
       containers:
       - name: calendar
         image: ghcr.io/jelmer/xandikos:latest
         ports:
-        - containerPort: 80
+        - containerPort: 8000
           name: http
         volumeMounts:
         - name: calendar-volume
