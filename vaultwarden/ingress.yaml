@@ -46,8 +46,6 @@ spec:
       labels:
         app: caddy
     spec:
-      nodeSelector:
-        public: "true"
       containers:
       - name: caddy
         image: caddy:latest

@@ -11,19 +11,6 @@ spec:
   - port: 80
     name: http
 ---
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: vaultwarden-pvc
-  namespace: vaultwarden
-spec:
-  accessModes:
-    - ReadWriteOnce
-  storageClassName: longhorn
-  resources:
-    requests:
-      storage: 1Gi
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -35,7 +22,7 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: vaultwarden # has to match .spec.template.metadata.labels
+      app: vaultwarden
   strategy:
     type: Recreate
   template:
