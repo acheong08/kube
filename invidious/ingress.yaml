@@ -3,21 +3,21 @@ kind: Ingress
 metadata:
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-production
+    spec.ingressClassName: traefik
   labels:
     app: invidious
   name: invidious-ingress
   namespace: invidious
 spec:
-  ingressClassName: traefik
   rules:
   - host: iv.duti.dev
     http:
       paths:
       - backend:
           service:
-            name: caddy
+            name: anubis
             port:
-              number: 80
+              number: 8923
         path: /
         pathType: Prefix
   tls:
