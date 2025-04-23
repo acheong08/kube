@@ -5,12 +5,12 @@ metadata:
     cert-manager.io/cluster-issuer: letsencrypt-production
     spec.ingressClassName: traefik
   labels:
-    app: dashboard
-  name: dashboard-ingress
-  namespace: kubernetes-dashboard
+    app: monitor
+  name: monitor-ingress
+  namespace: monitoring
 spec:
   rules:
-  - host: kube-dashboard.duti.dev
+  - host: kube-monitor.duti.dev
     http:
       paths:
       - backend:
@@ -22,14 +22,14 @@ spec:
         pathType: Prefix
   tls:
   - hosts:
-    - kube-dashboard.duti.dev
-    secretName: dashboard-tls
+    - kube-monitor.duti.dev
+    secretName: monitor-tls
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: caddy-config
-  namespace: kubernetes-dashboard
+  namespace: monitoring
 data:
   Caddyfile: |
     :80 {
@@ -37,12 +37,8 @@ data:
             basic_auth {
                 kube $2a$14$hovE7N8ydaVvrHFe6A4APOQeaRME30KvkYjjXEU7VP3.MAgHrUp8K
             }
-            reverse_proxy kubernetes-dashboard-kong-proxy:443 {
-                header_up authorization "Bearer {env.BEARER_TOKEN}"
-                transport http {
-                    tls
-                    tls_insecure_skip_verify
-                }
+            reverse_proxy kube-prometheus-stack-grafana:80 {
+                #header_up authorization "Bearer {env.BEARER_TOKEN}"
             }
         }
     }
@@ -51,7 +47,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: caddy
-  namespace: kubernetes-dashboard
+  namespace: monitoring
 spec:
   replicas: 1
   selector:
@@ -67,12 +63,12 @@ spec:
         image: caddy:latest
         ports:
         - containerPort: 80
-        env:
-        - name: BEARER_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: admin-user
-              key: token
+        #env:
+        #- name: BEARER_TOKEN
+        #  valueFrom:
+        #    secretKeyRef:
+        #      name: admin-user
+        #      key: token
         volumeMounts:
         - name: caddy-config-volume
           mountPath: /etc/caddy
@@ -88,7 +84,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: caddy
-  namespace: kubernetes-dashboard
+  namespace: monitoring
 spec:
   type: ClusterIP
   selector:

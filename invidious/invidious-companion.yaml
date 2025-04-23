@@ -28,25 +28,20 @@ spec:
                 values: ["true"]
       containers:
       - name: invidious-companion
-        image: quay.io/invidious/invidious-companion:latest
+        image: git.nadeko.net/fijxu/invidious-companion:latest
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8282
         env:
         - name: CONFIG_FILE
           value: /etc/invidious/config.toml
+        - name: YOUTUBESESSION_PLAYER_ID
+          value: 643afba4
         volumeMounts:
         - name: config
           mountPath: /etc/invidious/config.toml
           subPath: config.toml
           readOnly: true
-        securityContext:
-          runAsUser: 10001
-          runAsGroup: 10001
-          allowPrivilegeEscalation: false
-          readOnlyRootFilesystem: true
-          capabilities:
-            drop: ["ALL"]
       volumes:
       - name: config
         configMap:

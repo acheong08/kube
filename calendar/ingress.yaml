@@ -3,7 +3,7 @@ kind: Ingress
 metadata:
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-production
-    kubernetes.io/ingress.class: traefik
+    spec.ingressClassName: traefik
   labels:
     app: calendar
   name: calendar-ingress
