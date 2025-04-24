@@ -35,7 +35,7 @@ data:
     :80 {
         route {
             basic_auth {
-                kube $2a$14$hovE7N8ydaVvrHFe6A4APOQeaRME30KvkYjjXEU7VP3.MAgHrUp8K
+                kube "{env.PASSWORD_HASH}"
             }
             reverse_proxy kubernetes-dashboard-kong-proxy:443 {
                 header_up authorization "Bearer {env.BEARER_TOKEN}"
@@ -68,6 +68,11 @@ spec:
         ports:
         - containerPort: 80
         env:
+        - name: PASSWORD_HASH
+          valueFrom:
+            secretKeyRef:
+              name: password-hash
+              key: hash
         - name: BEARER_TOKEN
           valueFrom:
             secretKeyRef:

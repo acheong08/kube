@@ -34,7 +34,7 @@ data:
   Caddyfile: |
     :80 {
         basic_auth {
-            acheong $2a$14$4qPa0XVWb0/ABAoY/iPec.09.R5HSO7qGK7DsjuB1G8L9FJwIg2xu
+            acheong "{env.PASSWORD_HASH}"
         }
         route {
             reverse_proxy calendar:8000
@@ -61,6 +61,12 @@ spec:
         image: caddy:latest
         ports:
         - containerPort: 80
+        env:
+        - name: PASSWORD_HASH
+          valueFrom:
+            secretKeyRef:
+              name: password-hash
+              key: hash
         volumeMounts:
         - name: caddy-config-volume
           mountPath: /etc/caddy
