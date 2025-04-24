@@ -1,0 +1,21 @@
+experimental:
+  plugins:
+    bouncer:
+      moduleName: "github.com/maxlerebourg/crowdsec-bouncer-traefik-plugin"
+      version: "v1.3.0"
+additionalArguments:
+  - "--entrypoints.web.http.middlewares=kube-system-bouncer@kubernetescrd"
+  - "--entrypoints.websecure.http.middlewares=kube-system-bouncer@kubernetescrd"
+  - "--providers.kubernetescrd"
+deployment:
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: residential
+            operator: In
+            values: ["true"]
+service:
+  spec:
+    externalTrafficPolicy: Local

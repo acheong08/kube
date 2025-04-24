@@ -1,0 +1,38 @@
+container_runtime: containerd
+agent:
+  # To specify each pod you want to process it logs (pods present in the node)
+  acquisition:
+    # The namespace where the pod is located
+    - namespace: kube-system
+      # The pod name
+      podName: traefik-*
+      # as in crowdsec configuration, we need to specify the program name so the parser will match and parse logs
+      program: traefik
+  # Those are ENV variables
+  env:
+    # As we are running Nginx, we want to install the Nginx collection
+    - name: PARSERS
+      value: "crowdsecurity/cri-logs"
+    - name: COLLECTIONS
+      value: "crowdsecurity/traefik"
+    - name: DISABLE_PARSERS
+      value: "crowdsecurity/whitelists"
+  persistentVolume:
+    config:
+      enabled: false
+lapi:
+  dashboard:
+    enabled: false
+    ingress:
+      host: dashboard.local
+      enabled: true
+  env:
+    - name: ENROLL_KEY
+      valueFrom:
+        secretKeyRef:
+          name: crowdsec-enroll
+          key: enroll_key
+    - name: ENROLL_INSTANCE_NAME
+      value: "k3s_cluster"
+    - name: ENROLL_TAGS
+      value: "k3s"
