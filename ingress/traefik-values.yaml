@@ -21,6 +21,10 @@ deployment:
     proxyProtocol:
       insecure: true
   hostNetwork: true
+logs:
+  access:
+    enabled: true
+    format: json
 service:
   spec:
     externalTrafficPolicy: Local
