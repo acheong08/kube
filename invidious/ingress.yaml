@@ -1,9 +1,6 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-production
-    spec.ingressClassName: traefik
   labels:
     app: invidious
   name: invidious-ingress
@@ -65,11 +62,18 @@ data:
   Caddyfile: |
     :80 {
         route {
-            @proxy-routes expression `path_regexp('^/(vi/|vi_webp/|sb/|ggpht/|a/|ytc/)')`
+            @proxy-routes {
+              expression `path_regexp('^/(vi/|vi_webp/|sb/|ggpht/|a/|ytc/|videoplayback)')`
+            }
             @api-blocked {
                 path /api/v1/videos/*
                 path /api/manifest/hls_playlist/*
                 path /api/v1/channels/*
+            }
+            @anubis {
+                path /watch
+                path /.within.website/*
+                path /robots.txt
             }
             handle @api-blocked {
                 respond "API disabled due to abuse" 418
@@ -78,15 +82,8 @@ data:
                 header yt-proxy "true"
                 reverse_proxy yt-proxy:8080
             }
-            handle /.within.website/* {
+            handle @anubis {
                 reverse_proxy anubis:80
-            }
-            handle /watch {
-                reverse_proxy anubis:80
-            }
-            handle /videoplayback {
-                header yt-proxy "true"
-                reverse_proxy yt-proxy:8080
             }
             handle_path /companion/* {
                 header companion "true"

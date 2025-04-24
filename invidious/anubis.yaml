@@ -32,6 +32,8 @@ spec:
           value: iv.duti.dev
         - name: SERVE_ROBOTS_TXT
           value: "true"
+        - name: OG_PASSTHROUGH
+          value: "true"
 ---
 apiVersion: v1
 kind: Service

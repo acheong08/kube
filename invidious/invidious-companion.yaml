@@ -5,7 +5,7 @@ metadata:
   name: invidious-companion
   namespace: invidious
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: invidious-companion
@@ -23,7 +23,7 @@ spec:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
             - matchExpressions:
-              - key: residential
+              - key: home
                 operator: In
                 values: ["true"]
       containers:
@@ -35,8 +35,6 @@ spec:
         env:
         - name: CONFIG_FILE
           value: /etc/invidious/config.toml
-        - name: YOUTUBESESSION_PLAYER_ID
-          value: 643afba4
         volumeMounts:
         - name: config
           mountPath: /etc/invidious/config.toml
