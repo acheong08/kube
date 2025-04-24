@@ -22,10 +22,9 @@ agent:
       enabled: false
 lapi:
   dashboard:
-    enabled: false
+    enabled: true
     ingress:
-      host: dashboard.local
-      enabled: true
+      enabled: false
   env:
     - name: ENROLL_KEY
       valueFrom:
