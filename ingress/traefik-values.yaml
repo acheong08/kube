@@ -8,14 +8,19 @@ additionalArguments:
   - "--entrypoints.websecure.http.middlewares=kube-system-bouncer@kubernetescrd"
   - "--providers.kubernetescrd"
 deployment:
-  affinity:
-    nodeAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        nodeSelectorTerms:
-        - matchExpressions:
-          - key: residential
-            operator: In
-            values: ["true"]
+  kind: DaemonSet
+  ports:
+  web:
+    forwardedHeaders:
+      insecure: true
+    proxyProtocol:
+      insecure: true
+  websecure:
+    forwardedHeaders:
+      insecure: true
+    proxyProtocol:
+      insecure: true
+  hostNetwork: true
 service:
   spec:
     externalTrafficPolicy: Local
