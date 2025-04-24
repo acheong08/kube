@@ -25,7 +25,7 @@ spec:
       enableServiceLinks: false
       containers:
       - name: invidious
-        image: quay.io/invidious/invidious:master
+        image: ghcr.io/acheong08/invidious:neko
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 3000

@@ -28,8 +28,8 @@ spec:
                 values: ["true"]
       containers:
       - name: invidious-companion
-        image: git.nadeko.net/fijxu/invidious-companion:latest
-        imagePullPolicy: IfNotPresent
+        image: quay.io/invidious/invidious-companion:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 8282
         env:
