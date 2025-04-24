@@ -11,4 +11,7 @@ spec:
             crowdsecLapiHost: crowdsec-service.crowdsec.svc.cluster.local:8080
             # LogLevel: DEBUG
             crowdsecLapiScheme: http
-            crowdsecLapiKey: "REDACTED"
+            crowdsecLapiKey: 
+              secret:
+                name: crowdsec-bouncer
+                key: api-key
