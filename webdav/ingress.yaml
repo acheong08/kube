@@ -1,0 +1,100 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-production
+    spec.ingressClassName: traefik
+  labels:
+    app: webdav
+  name: webdav-ingress
+  namespace: webdav
+spec:
+  rules:
+  - host: webdav.duti.dev
+    http:
+      paths:
+      - backend:
+          service:
+            name: caddy
+            port: 
+              number: 80
+        path: /
+        pathType: Prefix  
+  tls:
+  - hosts:
+    - webdav.duti.dev
+    secretName: webdav-tls
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: caddy-config
+  namespace: webdav
+data:
+  Caddyfile: |
+    :80 {
+        header {
+            Access-Control-Allow-Origin "*"
+            Access-Control-Allow-Methods "*"
+            Access-Control-Allow-Headers "*"
+        }
+        
+        route {
+            reverse_proxy webdav:80 {
+                header_up X-Real-IP {remote_host}
+                header_up REMOTE-HOST {remote_host}
+                header_up X-Forwarded-For {http.request.header.X-Forwarded-For}
+                header_up Host {host}
+            }
+        }
+    }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: caddy
+  namespace: webdav
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: caddy
+  template:
+    metadata:
+      labels:
+        app: caddy
+    spec:
+      containers:
+      - name: caddy
+        image: caddy:latest
+        ports:
+        - containerPort: 80
+        env:
+        - name: PASSWORD_HASH
+          valueFrom:
+            secretKeyRef:
+              name: password-hash
+              key: hash
+        volumeMounts:
+        - name: caddy-config-volume
+          mountPath: /etc/caddy
+      volumes:
+      - name: caddy-config-volume
+        configMap:
+          name: caddy-config
+          items:
+          - key: Caddyfile
+            path: Caddyfile
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: caddy
+  namespace: webdav
+spec:
+  type: ClusterIP
+  selector:
+    app: caddy
+  ports:
+    - port: 80
+      targetPort: 80

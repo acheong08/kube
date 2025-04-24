@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: webdav
+  namespace: webdav
+spec:
+  type: ClusterIP
+  selector:
+    app: webdav
+  ports:
+    - port: 80
+      targetPort: 6065
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webdav
+  namespace: webdav
+  labels:
+    app: webdav
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webdav
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: webdav
+    spec:      
+      restartPolicy: Always
+      containers:
+      - name: webdav
+        image: ghcr.io/hacdias/webdav:latest
+        args: ["-c", "/data/config.yml"]
+        ports:
+        - containerPort: 6065
+          name: http
+        volumeMounts:
+        - name: webdav-volume
+          mountPath: /data
+      volumes:
+      - name: webdav-volume
+        persistentVolumeClaim:
+          claimName: webdav-pvc

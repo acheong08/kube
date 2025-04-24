@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-production
+    spec.ingressClassName: traefik
+  labels:
+    app: maven
+  name: maven-ingress
+  namespace: maven
+spec:
+  rules:
+  - host: maven.duti.dev
+    http:
+      paths:
+      - backend:
+          service:
+            name: maven
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - maven.duti.dev
+    secretName: maven-tls
