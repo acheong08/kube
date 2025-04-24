@@ -1,3 +1,3 @@
 # Longhorn
 Installed manually with `kubectl`
-<https://longhorn.io/docs/1.8.1/deploy/install/install-with-kubectl/>
+`kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/v1.8.1/deploy/longhorn.yaml`
