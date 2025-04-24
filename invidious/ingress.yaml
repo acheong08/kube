@@ -15,9 +15,9 @@ spec:
       paths:
       - backend:
           service:
-            name: anubis
+            name: caddy
             port:
-              number: 8923
+              number: 80
         path: /
         pathType: Prefix
   tls:
@@ -66,9 +66,23 @@ data:
     :80 {
         route {
             @proxy-routes expression `path_regexp('^/(vi/|vi_webp/|sb/|ggpht/|a/|ytc/)')`
+            @api-blocked {
+                path /api/v1/videos/*
+                path /api/manifest/hls_playlist/*
+                path /api/v1/channels/*
+            }
+            handle @api-blocked {
+                respond "API disabled due to abuse" 418
+            }
             handle @proxy-routes {
                 header yt-proxy "true"
                 reverse_proxy yt-proxy:8080
+            }
+            handle /.within.website/* {
+                reverse_proxy anubis:80
+            }
+            handle /watch {
+                reverse_proxy anubis:80
             }
             handle /videoplayback {
                 header yt-proxy "true"
