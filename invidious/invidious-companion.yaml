@@ -40,6 +40,12 @@ spec:
           mountPath: /etc/invidious/config.toml
           subPath: config.toml
           readOnly: true
+        livenessProbe:
+          exec:
+            command:
+            - "/thc"
+          initialDelaySeconds: 5
+          periodSeconds: 5
       volumes:
       - name: config
         configMap:
@@ -50,7 +56,6 @@ spec:
       securityContext:
         seccompProfile:
           type: RuntimeDefault
-
 ---
 # Service Exposure
 apiVersion: v1
