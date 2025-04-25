@@ -21,6 +21,8 @@ deployment:
     proxyProtocol:
       insecure: true
   hostNetwork: true
+nodeSelector:
+  public: "true"
 logs:
   access:
     enabled: true
