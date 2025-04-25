@@ -1,0 +1,65 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: conduit
+  namespace: conduit
+spec:
+  type: ClusterIP
+  selector:
+    app: conduit
+  ports:
+    - port: 80
+      targetPort: 6167
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: conduit
+  namespace: conduit
+  labels:
+    app: conduit
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: conduit
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: conduit
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: conduit
+          image: registry.gitlab.com/famedly/conduit/matrix-conduit:latest
+          env:
+            - name: CONDUIT_SERVER_NAME
+              value: "conduit.duti.dev"
+            - name: CONDUIT_DATABASE_PATH
+              value: /var/lib/matrix-conduit/
+            - name: CONDUIT_DATABASE_BACKEND
+              value: "rocksdb"
+            - name: CONDUIT_ALLOW_REGISTRATION
+              value: "true"
+            - name: CONDUIT_ALLOW_FEDERATION
+              value: "false"
+            - name: CONDUIT_MAX_REQUEST_SIZE
+              value: "20000000"
+            - name: CONDUIT_TRUSTED_SERVERS
+              value: '["matrix.org"]'
+            - name: CONDUIT_MAX_CONCURRENT_REQUESTS
+              value: "100"
+            - name: CONDUIT_PORT
+              value: "6167"
+          ports:
+            - containerPort: 6167
+              name: conduit
+          volumeMounts:
+            - name: db
+              mountPath: /var/lib/matrix-conduit/
+      volumes:
+        - name: db
+          persistentVolumeClaim:
+            claimName: conduit-pvc
