@@ -9,7 +9,7 @@ spec:
     app: conduit
   ports:
     - port: 80
-      targetPort: 6167
+      targetPort: 80
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -43,8 +43,13 @@ spec:
               value: "rocksdb"
             - name: CONDUIT_ALLOW_REGISTRATION
               value: "true"
+            - name: CONDUIT_REGISTRATION_TOKEN
+              valueFrom: 
+                secretKeyRef:
+                  name: registration-token
+                  key: token
             - name: CONDUIT_ALLOW_FEDERATION
-              value: "false"
+              value: "true"
             - name: CONDUIT_MAX_REQUEST_SIZE
               value: "20000000"
             - name: CONDUIT_TRUSTED_SERVERS
@@ -52,9 +57,13 @@ spec:
             - name: CONDUIT_MAX_CONCURRENT_REQUESTS
               value: "100"
             - name: CONDUIT_PORT
-              value: "6167"
+              value: "80"
+            - name: CONDUIT_CONFIG
+              value: ""
+            - name: CONDUIT_ADDRESS
+              value: "0.0.0.0"
           ports:
-            - containerPort: 6167
+            - containerPort: 80
               name: conduit
           volumeMounts:
             - name: db
