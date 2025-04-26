@@ -34,7 +34,7 @@ data:
   Caddyfile: |
     :80 {
         route {
-          root * /data
+          root * /srv
           file_server
         }
     }
@@ -63,7 +63,7 @@ spec:
         - name: caddy-config-volume
           mountPath: /etc/caddy
         - name: statichost-volume
-          mountPath: /data
+          mountPath: /srv
       volumes:
       - name: caddy-config-volume
         configMap:
