@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: superp
+  namespace: superp
+spec:
+  clusterIP: None
+  selector:
+    app: superp
+  ports:
+  - port: 80
+    name: http
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: superp
+  namespace: superp
+  labels:
+    app: superp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: superp
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: superp
+    spec:
+      restartPolicy: Always
+      containers:
+      - name: superp
+        image: ghcr.io/acheong08/super-productivity:master
+        ports:
+        - containerPort: 80
+          name: http
