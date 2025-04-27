@@ -24,8 +24,6 @@ ingress:
     - host: calendar.duti.dev
       path: /
       pathType: Prefix
-  # TLS will be auto-generated based on hosts, with secretName <fullnameOverride>-tls
-  tls: []
   # Use Caddy as authentication proxy (basic auth) before calendar service
   auth:
     enabled: true

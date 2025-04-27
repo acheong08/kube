@@ -24,10 +24,7 @@
      - host: maven.duti.dev
        path: /
        pathType: Prefix
-   tls:
-     - hosts:
-         - maven.duti.dev
-       secretName: maven-tls
+
    # Optional auth via Caddy (disabled by default)
    auth:
      enabled: false

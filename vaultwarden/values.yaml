@@ -24,11 +24,6 @@
      - host: vault.duti.dev
        path: /
        pathType: Prefix
-   # TLS configuration for Vaultwarden
-   tls:
-     - hosts:
-         - vault.duti.dev
-       secretName: vaultwarden-tls
    # No external auth proxy required for Vaultwarden
    auth:
      enabled: false
