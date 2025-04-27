@@ -1,0 +1,16 @@
+{{- if .Values.ingress.auth.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "simple-app.fullname" . }}-caddy
+  labels:
+    app.kubernetes.io/name: {{ include "simple-app.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+spec:
+  type: ClusterIP
+  selector:
+    app: {{ include "simple-app.fullname" . }}-caddy
+  ports:
+    - port: {{ .Values.ingress.auth.servicePort }}
+      targetPort: {{ .Values.ingress.auth.servicePort }}
+{{- end }}

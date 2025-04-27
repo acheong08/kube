@@ -1,0 +1,19 @@
+{{- if .Values.ingress.auth.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "simple-app.fullname" . }}-caddy-config
+  labels:
+    app.kubernetes.io/name: {{ include "simple-app.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+data:
+  Caddyfile: |
+    :80 {
+        basic_auth {
+            {{ .Values.ingress.auth.username }} "{env.PASSWORD_HASH}"
+        }
+        route {
+            reverse_proxy {{ include "simple-app.fullname" . }}:{{ .Values.service.port }}
+        }
+    }
+{{- end }}

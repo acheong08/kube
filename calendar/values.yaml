@@ -1,0 +1,41 @@
+# Values override for simple-app chart to deploy the calendar service
+# Usage: helm upgrade --install calendar ./charts/simple-app -n calendar -f calendar/values.yaml
+
+fullnameOverride: calendar
+
+replicaCount: 1
+
+image:
+  repository: ghcr.io/jelmer/xandikos
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8000
+  targetPort: 8000
+
+ingress:
+  enabled: true
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-production
+  className: traefik
+  hosts:
+    - host: calendar.duti.dev
+      path: /
+      pathType: Prefix
+  # TLS will be auto-generated based on hosts, with secretName <fullnameOverride>-tls
+  tls: []
+  # Use Caddy as authentication proxy (basic auth) before calendar service
+  auth:
+    enabled: true
+    # Username for basic auth (must match Caddyfile rule)
+    username: acheong
+    # Secret containing password hash under key "hash"
+    # Defaults to "password-hash" if not overridden
+    # secretName: password-hash
+
+persistence:
+  enabled: true
+  existingClaim: calendar-pvc
+  mountPath: /data

@@ -1,0 +1,62 @@
+# Values override for simple-app chart to deploy the Conduit Matrix server
+# Usage: helm upgrade --install matrix ./charts/simple-app -n conduit -f matrix/values.yaml
+#
+fullnameOverride: conduit
+
+replicaCount: 1
+
+image:
+  repository: registry.gitlab.com/famedly/conduit/matrix-conduit
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 80
+
+ingress:
+  enabled: true
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-production
+  className: traefik
+  hosts:
+    - host: conduit.duti.dev
+      path: /
+      pathType: Prefix
+  auth:
+    enabled: false
+
+persistence:
+  enabled: true
+  existingClaim: conduit-pvc
+  mountPath: /var/lib/matrix-conduit
+
+env:
+  - name: CONDUIT_SERVER_NAME
+    value: "conduit.duti.dev"
+  - name: CONDUIT_DATABASE_PATH
+    value: /var/lib/matrix-conduit/
+  - name: CONDUIT_DATABASE_BACKEND
+    value: "rocksdb"
+  - name: CONDUIT_ALLOW_REGISTRATION
+    value: "true"
+  - name: CONDUIT_REGISTRATION_TOKEN
+    valueFrom:
+      secretKeyRef:
+        name: registration-token
+        key: token
+  - name: CONDUIT_ALLOW_FEDERATION
+    value: "true"
+  - name: CONDUIT_MAX_REQUEST_SIZE
+    value: "20000000"
+  - name: CONDUIT_TRUSTED_SERVERS
+    value: '["matrix.org"]'
+  - name: CONDUIT_MAX_CONCURRENT_REQUESTS
+    value: "100"
+  - name: CONDUIT_PORT
+    value: "80"
+  - name: CONDUIT_CONFIG
+    value: ""
+  - name: CONDUIT_ADDRESS
+    value: "0.0.0.0"

@@ -1,0 +1,40 @@
+{{- if .Values.ingress.auth.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "simple-app.fullname" . }}-caddy
+  labels:
+    app.kubernetes.io/name: {{ include "simple-app.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+spec:
+  replicas: {{ $.Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "simple-app.fullname" . }}-caddy
+  template:
+    metadata:
+      labels:
+        app: {{ include "simple-app.fullname" . }}-caddy
+    spec:
+      containers:
+      - name: caddy
+        image: {{ .Values.ingress.auth.image.repository }}:{{ .Values.ingress.auth.image.tag }}
+        ports:
+        - containerPort: {{ .Values.ingress.auth.servicePort }}
+        env:
+        - name: PASSWORD_HASH
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.ingress.auth.secretName }}
+              key: hash
+        volumeMounts:
+        - name: caddy-config-volume
+          mountPath: /etc/caddy
+      volumes:
+      - name: caddy-config-volume
+        configMap:
+          name: {{ include "simple-app.fullname" . }}-caddy-config
+          items:
+          - key: Caddyfile
+            path: Caddyfile
+{{- end }}

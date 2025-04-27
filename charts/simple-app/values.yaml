@@ -1,0 +1,49 @@
+replicaCount: 1
+image:
+  repository: ""
+  tag: "latest"
+  pullPolicy: IfNotPresent
+nameOverride: ""
+fullnameOverride: ""
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 80
+ingress:
+  enabled: false
+  annotations: {}
+  className: ""
+  hosts:
+    - host: chart-example.local
+      path: /
+      pathType: Prefix
+  tls: []
+  # Optional authentication proxy using Caddy
+  auth:
+    # Enable authentication proxy (deploys Caddy reverse proxy)
+    enabled: false
+    # Kubernetes secret containing the password hash under key "hash"
+    secretName: password-hash
+    # Username for basic auth
+    username: user
+    # Caddy image settings
+    image:
+      repository: caddy
+      tag: latest
+    # Service port for Caddy proxy
+    servicePort: 80
+persistence:
+  enabled: false
+  existingClaim: ""
+  storageClass: ""
+  accessModes:
+    - ReadWriteOnce
+  size: 1Gi
+  mountPath: /data
+securityContext: {}
+
+# Optional command and args for container
+command: []
+args: []
+env: {}
+resources: {}

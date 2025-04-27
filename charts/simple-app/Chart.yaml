@@ -1,0 +1,6 @@
+apiVersion: v2
+name: simple-app
+description: A Helm chart for simple web applications
+type: application
+version: 0.1.0
+appVersion: "latest"

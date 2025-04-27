@@ -1,0 +1,39 @@
+ # Values override for simple-app chart to deploy the vaultwarden service
+ # Usage: helm upgrade --install vaultwarden ./charts/simple-app -n vaultwarden -f vaultwarden/values.yaml
+
+ fullnameOverride: vaultwarden
+
+ replicaCount: 1
+
+ image:
+   repository: vaultwarden/server
+   tag: latest
+   pullPolicy: IfNotPresent
+
+ service:
+   type: ClusterIP
+   port: 80
+   targetPort: 80
+
+ ingress:
+   enabled: true
+   annotations:
+     cert-manager.io/cluster-issuer: letsencrypt-production
+   className: traefik
+   hosts:
+     - host: vault.duti.dev
+       path: /
+       pathType: Prefix
+   # TLS configuration for Vaultwarden
+   tls:
+     - hosts:
+         - vault.duti.dev
+       secretName: vaultwarden-tls
+   # No external auth proxy required for Vaultwarden
+   auth:
+     enabled: false
+
+ persistence:
+   enabled: true
+   existingClaim: vaultwarden-pvc
+   # mountPath configured in chart defaults (/data)

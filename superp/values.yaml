@@ -1,0 +1,32 @@
+ # Values override for simple-app chart to deploy the superp service
+ # Usage: helm upgrade --install superp ./charts/simple-app -n superp -f superp/values.yaml
+
+ fullnameOverride: superp
+
+ replicaCount: 1
+
+ image:
+   repository: ghcr.io/acheong08/super-productivity
+   tag: master
+   pullPolicy: IfNotPresent
+
+ service:
+   type: ClusterIP
+   port: 80
+   targetPort: 80
+
+ ingress:
+   enabled: true
+   annotations:
+     cert-manager.io/cluster-issuer: letsencrypt-production
+   className: traefik
+   hosts:
+     - host: super.duti.dev
+       path: /
+       pathType: Prefix
+   # Disable authentication proxy
+   auth:
+     enabled: false
+
+ persistence:
+   enabled: false
