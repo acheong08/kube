@@ -1,0 +1,45 @@
+ # Values override for simple-app chart to deploy the Maven (Reposilite) server
+ # Usage: helm upgrade --install maven ./charts/simple-app -n maven -f maven/values.yaml
+
+ fullnameOverride: maven
+
+ replicaCount: 1
+
+ image:
+   repository: dzikoysk/reposilite
+   tag: latest
+   pullPolicy: IfNotPresent
+
+ service:
+   type: ClusterIP
+   port: 8000
+   targetPort: 8000
+
+ ingress:
+   enabled: true
+   annotations:
+     cert-manager.io/cluster-issuer: letsencrypt-production
+   className: traefik
+   hosts:
+     - host: maven.duti.dev
+       path: /
+       pathType: Prefix
+   tls:
+     - hosts:
+         - maven.duti.dev
+       secretName: maven-tls
+   # Optional auth via Caddy (disabled by default)
+   auth:
+     enabled: false
+
+ persistence:
+   enabled: true
+   existingClaim: maven-pvc
+   mountPath: /app/data
+
+ # Environment variables for Reposilite
+ env:
+   - name: REPOSILITE_OPTS
+     value: "--port 8000"
+   - name: JAVA_OPTS
+     value: "-Xmx128M"
