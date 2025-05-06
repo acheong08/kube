@@ -28,7 +28,7 @@ spec:
                 values: ["true"]
       containers:
       - name: invidious-companion
-        image: quay.io/invidious/invidious-companion:latest
+        image: ghcr.io/acheong08/invidious-companion:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 8282
@@ -40,12 +40,6 @@ spec:
           mountPath: /etc/invidious/config.toml
           subPath: config.toml
           readOnly: true
-        livenessProbe:
-          exec:
-            command:
-            - "/thc"
-          initialDelaySeconds: 5
-          periodSeconds: 5
       volumes:
       - name: config
         configMap:
