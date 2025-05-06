@@ -60,3 +60,10 @@ env:
     value: ""
   - name: CONDUIT_ADDRESS
     value: "0.0.0.0"
+  - name: CONDUIT_TURN_SECRET
+    valueFrom:
+      secretKeyRef:
+        name: turn-secret
+        key: secret
+  - name: CONDUIT_TURN_URIS
+    value: '["turn:mail.duti.dev?transport=udp", "turn:mail.duti.dev?transport=tcp"]'
