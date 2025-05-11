@@ -23,7 +23,7 @@ spec:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
             - matchExpressions:
-              - key: home
+              - key: residential
                 operator: In
                 values: ["true"]
       containers:
