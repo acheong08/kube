@@ -3,6 +3,16 @@
 #
 fullnameOverride: conduit
 
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: home
+              operator: NotIn
+              values:
+                - "true"
+
 replicaCount: 1
 strategy:
  type: Recreate
