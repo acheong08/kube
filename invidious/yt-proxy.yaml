@@ -27,7 +27,7 @@ spec:
                 values: ["true"]
       containers:
       - name: yt-proxy
-        image: git.nadeko.net/fijxu/http3-ytproxy:latest
+        image: ghcr.io/acheong08/http3-ytproxy:latest
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
