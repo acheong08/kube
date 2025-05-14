@@ -1,4 +1,6 @@
 replicaCount: 1
+strategy:
+  type: RollingUpdate
 image:
   repository: ""
   tag: "latest"

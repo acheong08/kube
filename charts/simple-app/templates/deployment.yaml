@@ -7,6 +7,8 @@ metadata:
     app.kubernetes.io/instance: {{ .Release.Name }}
 spec:
   replicas: {{ .Values.replicaCount }}
+  strategy:
+{{ toYaml .Values.strategy | indent 4 }}
   selector:
     matchLabels:
       app.kubernetes.io/name: {{ include "simple-app.name" . }}
