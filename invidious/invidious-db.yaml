@@ -31,6 +31,8 @@ spec:
     spec:
       nodeSelector:
         residential: true
+        # Add your custom node label below, for example:
+        # disktype: ssd
       containers:
         - name: invidious-db
           image: docker.io/library/postgres:14
