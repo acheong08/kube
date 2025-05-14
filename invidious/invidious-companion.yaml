@@ -18,14 +18,8 @@ spec:
       labels:
         app: invidious-companion
     spec:
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key: residential
-                operator: In
-                values: ["true"]
+      nodeSelector:
+        home: "true"
       containers:
       - name: invidious-companion
         image: ghcr.io/acheong08/invidious-companion:latest

@@ -14,14 +14,8 @@ spec:
       labels:
         app: invidious
     spec:
-      # affinity:
-      #   nodeAffinity:
-      #     requiredDuringSchedulingIgnoredDuringExecution:
-      #       nodeSelectorTerms:
-      #       - matchExpressions:
-      #         - key: residential
-      #           operator: In
-      #           values: ["true"]
+      nodeSelector:
+        residential: "true"
       enableServiceLinks: false
       containers:
       - name: invidious
