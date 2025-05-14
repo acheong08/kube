@@ -37,6 +37,8 @@ spec:
       labels:
         app: caddy
     spec:
+      nodeSelector:
+        residential: "true"
       containers:
       - name: caddy
         image: caddy:latest

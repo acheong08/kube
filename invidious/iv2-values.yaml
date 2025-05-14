@@ -1,0 +1,32 @@
+ # Values override for simple-app chart to deploy the superp service
+ # Usage: helm upgrade --install iv2 ./charts/simple-app -n invidious -f invidious/iv2-values.yaml
+
+ fullnameOverride: iv2
+
+ replicaCount: 1
+
+ image:
+   repository: ghcr.io/acheong08/invidious-sabr-player
+   tag: latest
+   pullPolicy: IfNotPresent
+
+ service:
+   type: ClusterIP
+   port: 80
+   targetPort: 5173
+
+ ingress:
+   enabled: true
+   annotations:
+     cert-manager.io/cluster-issuer: letsencrypt-production
+   className: traefik
+   hosts:
+     - host: iv2.duti.dev
+       path: /
+       pathType: Prefix
+   # Disable authentication proxy
+   auth:
+     enabled: false
+
+ persistence:
+   enabled: false
