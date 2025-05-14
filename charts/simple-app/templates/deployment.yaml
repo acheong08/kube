@@ -24,6 +24,8 @@ spec:
 {{ toYaml .Values.securityContext | indent 8 }}
       {{- end }}
       restartPolicy: Always
+      affinity:
+{{ toYaml .Values.affinity | indent 8 }}
       containers:
         - name: {{ include "simple-app.name" . }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"

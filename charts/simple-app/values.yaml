@@ -44,6 +44,8 @@ persistence:
   mountPath: /data
 securityContext: {}
 
+affinity: {}
+
 # Optional command and args for container
 command: []
 args: []
