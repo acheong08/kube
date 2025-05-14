@@ -8,7 +8,7 @@ additionalArguments:
   - "--entrypoints.websecure.http.middlewares=kube-system-bouncer@kubernetescrd"
   - "--providers.kubernetescrd"
 deployment:
-  kind: DaemonSet
+  kind: Deployment
   ports:
   web:
     forwardedHeaders:
@@ -22,7 +22,7 @@ deployment:
       insecure: true
   hostNetwork: true
 nodeSelector:
-  public: "true"
+  ingress: "true"
 logs:
   access:
     enabled: true

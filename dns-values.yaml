@@ -1,0 +1,12 @@
+# External DNS with Cloudflare
+#`kubectl create secret generic cloudflare-api-key --from-literal=apiKey=YOUR_API_TOKEN`
+#`helm upgrade --install external-dns external-dns/external-dns --values values.yaml`
+provider:
+  name: cloudflare
+policy: sync # or upsert-only
+env:
+  - name: CF_API_TOKEN
+    valueFrom:
+      secretKeyRef:
+        name: cloudflare-api-key
+        key: apiKey
