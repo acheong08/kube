@@ -27,7 +27,7 @@ spec:
         - containerPort: 8923
         env:
         - name: TARGET
-          value: http://invidious:3000
+          value: http://caddy:80
         - name: BIND
           value: ":8923"
         - name: COOKIE_DOMAIN
@@ -36,6 +36,16 @@ spec:
           value: "true"
         - name: OG_PASSTHROUGH
           value: "true"
+        - name: POLICY_FNAME
+          value: /botPolicies.json
+        volumeMounts:
+        - name: bot-policies
+          mountPath: /botPolicies.json
+          subPath: botPolicies.json
+      volumes:
+      - name: bot-policies
+        configMap:
+          name: anubis-bot-policies
 ---
 apiVersion: v1
 kind: Service
@@ -50,3 +60,12 @@ spec:
   - protocol: TCP
     port: 80
     targetPort: 8923
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: anubis-bot-policies
+  namespace: invidious
+data:
+  botPolicies.json: |
+    {"bots":[{"name":"catch-all-challenge","path_regex":".*","action":"CHALLENGE"}]}

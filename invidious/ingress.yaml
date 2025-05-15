@@ -12,7 +12,7 @@ spec:
       paths:
       - backend:
           service:
-            name: caddy
+            name: anubis
             port:
               number: 80
         path: /
@@ -76,11 +76,11 @@ data:
                 path /api/manifest/hls_playlist/*
                 path /api/v1/channels/*
             }
-            @anubis {
-                path /watch
-                path /.within.website/*
-                path /robots.txt
-            }
+            # @anubis {
+            #     path /watch
+            #     path /.within.website/*
+            #     path /robots.txt
+            # }
             handle @api-blocked {
                 respond "API disabled due to abuse" 418
             }
@@ -88,9 +88,9 @@ data:
                 header yt-proxy "true"
                 reverse_proxy yt-proxy:8080
             }
-            handle @anubis {
-                reverse_proxy anubis:80
-            }
+            # handle @anubis {
+            #     reverse_proxy anubis:80
+            # }
             #handle /watch {
             #  redir /watch https://iv2.duti.dev/watch/{query.v}
             #}
