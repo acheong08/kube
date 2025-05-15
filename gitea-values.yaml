@@ -1,0 +1,56 @@
+gitea:
+  admin:
+    username: admin
+    passwordMode: initialOnlyNoReset
+  config:
+    # actions:
+    #   ENABLED: true
+    server:
+      DOMAIN: git.duti.dev
+      ROOT_URL: https://git.duti.dev
+    service:
+      REGISTER_EMAIL_CONFIRM: true
+    mailer:
+      ENABLED: true
+      SMTP_ADDR: mail.duti.dev
+      SMTP_PORT: 465
+      USER: gitea@duti.dev
+      PASSWD: REDACTED_GITEA_PASSWORD
+
+ingress:
+  enabled: true
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-production
+    className: traefik
+  hosts:
+   - host: git.duti.dev
+     paths:
+       - path: /
+         pathType: Prefix
+  tls:
+  - hosts:
+    - git.duti.dev
+    secretName: gitea-tls
+
+postgresql-ha:
+  enabled: false
+postgresql:
+  enabled: true
+redis-cluster:
+  enabled: false
+redis:
+  enabled: true
+
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: home
+              operator: NotIn
+              values:
+                - "true"
+            - key: cloud
+              operator: NotIn
+              values:
+                - "do"
