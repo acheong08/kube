@@ -15,6 +15,7 @@ spec:
         app: invidious
     spec:
       nodeSelector:
+        kubernetes.io/arch: amd64
         residential: "true"
       enableServiceLinks: false
       containers:
