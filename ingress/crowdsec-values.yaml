@@ -10,21 +10,31 @@ agent:
       program: traefik
   # Those are ENV variables
   env:
-    # As we are running Nginx, we want to install the Nginx collection
     - name: PARSERS
       value: "crowdsecurity/cri-logs"
     - name: COLLECTIONS
       value: "crowdsecurity/traefik"
-    - name: DISABLE_PARSERS
-      value: "crowdsecurity/whitelists"
   persistentVolume:
     config:
       enabled: false
 lapi:
+  replicas: 1
   dashboard:
     enabled: false
     ingress:
       enabled: false
+  persistentVolume:
+    config:
+      enabled: true
+    data:
+      enabled: true
+  extraVolumes:
+    - name: aws-api-blocklist
+      configMap:
+        name: aws-api-blocklist
+  extraVolumeMounts:
+    - name: aws-api-blocklist
+      mountPath: /etc/crowdsec/aws_api_blocklist
   env:
     - name: ENROLL_KEY
       valueFrom:
@@ -35,3 +45,5 @@ lapi:
       value: "k3s_cluster"
     - name: ENROLL_TAGS
       value: "k3s"
+  nodeSelector:
+    residential: "true"
