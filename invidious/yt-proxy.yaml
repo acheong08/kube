@@ -4,7 +4,7 @@ metadata:
   name: yt-proxy
   namespace: invidious
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: yt-proxy
@@ -17,14 +17,8 @@ spec:
       labels:
         app: yt-proxy
     spec:
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key: home
-                operator: In
-                values: ["true"]
+      nodeSelector:
+        residential: "true"
       containers:
       - name: yt-proxy
         image: ghcr.io/acheong08/http3-ytproxy:latest

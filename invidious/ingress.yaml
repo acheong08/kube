@@ -52,7 +52,7 @@ spec:
         app: caddy
     spec:
       nodeSelector:
-        residential: "true"
+        ingress: "true"
       containers:
       - name: caddy
         image: caddy:latest

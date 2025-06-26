@@ -18,7 +18,7 @@ spec:
         app: anubis
     spec:
       nodeSelector:
-        residential: "true"
+        ingress: "true"
       containers:
       - name: anubis
         image: ghcr.io/techarohq/anubis:latest
