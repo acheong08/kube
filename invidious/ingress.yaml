@@ -52,7 +52,7 @@ spec:
         app: caddy
     spec:
       nodeSelector:
-        ingress: "true"
+        home: "true"
       containers:
       - name: caddy
         image: caddy:latest
@@ -87,7 +87,6 @@ data:
             }
             @api-blocked {
                 path /api/v1/videos/*
-                path /api/manifest/hls_playlist/*
                 path /api/v1/channels/*
             }
             # @anubis {

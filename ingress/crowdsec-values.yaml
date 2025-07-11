@@ -28,13 +28,6 @@ lapi:
       enabled: true
     data:
       enabled: true
-  extraVolumes:
-    - name: aws-api-blocklist
-      configMap:
-        name: aws-api-blocklist
-  extraVolumeMounts:
-    - name: aws-api-blocklist
-      mountPath: /etc/crowdsec/aws_api_blocklist
   env:
     - name: ENROLL_KEY
       valueFrom:

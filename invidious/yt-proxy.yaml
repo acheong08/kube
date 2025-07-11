@@ -18,7 +18,7 @@ spec:
         app: yt-proxy
     spec:
       nodeSelector:
-        residential: "true"
+        home: "true"
       containers:
       - name: yt-proxy
         image: ghcr.io/acheong08/http3-ytproxy:latest
