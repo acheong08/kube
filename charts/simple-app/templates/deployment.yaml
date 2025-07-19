@@ -23,9 +23,15 @@ spec:
       securityContext:
 {{ toYaml .Values.securityContext | indent 8 }}
       {{- end }}
-      restartPolicy: Always
+      {{- if .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.nodeSelector | indent 8 }}
+      {{- end }}
+      {{- if .Values.affinity }}
       affinity:
 {{ toYaml .Values.affinity | indent 8 }}
+      {{- end }}
+      restartPolicy: Always
       containers:
         - name: {{ include "simple-app.name" . }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"

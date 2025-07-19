@@ -44,7 +44,20 @@ persistence:
   mountPath: /data
 securityContext: {}
 
+# Node selection and affinity/anti-affinity
+nodeSelector: {}
 affinity: {}
+# Example anti-affinity to blacklist nodes with label "disallowed=true":
+# affinity:
+#   podAntiAffinity:
+#     requiredDuringSchedulingIgnoredDuringExecution:
+#       - labelSelector:
+#           matchExpressions:
+#             - key: disallowed
+#               operator: In
+#               values:
+#                 - "true"
+#         topologyKey: "kubernetes.io/hostname"
 
 # Optional command and args for container
 command: []
