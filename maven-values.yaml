@@ -34,6 +34,17 @@
    existingClaim: maven-pvc
    mountPath: /app/data
 
+# Blacklist node with label "kubernetes.io/hostname: home"
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: NotIn
+              values:
+                - home
+
  # Environment variables for Reposilite
  env:
    - name: REPOSILITE_OPTS
