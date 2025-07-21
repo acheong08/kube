@@ -1,53 +1,51 @@
  # Values override for simple-app chart to deploy the Maven (Reposilite) server
  # Usage: helm upgrade --install maven ./charts/simple-app -n maven -f maven/values.yaml
 
- fullnameOverride: maven
+fullnameOverride: maven
 
- replicaCount: 1
+replicaCount: 1
 
- image:
-   repository: dzikoysk/reposilite
-   tag: latest
-   pullPolicy: IfNotPresent
+image:
+ repository: dzikoysk/reposilite
+ tag: latest
+ pullPolicy: IfNotPresent
 
- service:
-   type: ClusterIP
-   port: 8000
-   targetPort: 8000
+service:
+ type: ClusterIP
+ port: 8000
+ targetPort: 8000
 
- ingress:
-   enabled: true
-   annotations:
-     cert-manager.io/cluster-issuer: letsencrypt-production
-   className: traefik
-   hosts:
-     - host: maven.duti.dev
-       path: /
-       pathType: Prefix
+ingress:
+ enabled: true
+ annotations:
+   cert-manager.io/cluster-issuer: letsencrypt-production
+ className: traefik
+ hosts:
+   - host: maven.duti.dev
+     path: /
+     pathType: Prefix
 
-   # Optional auth via Caddy (disabled by default)
-   auth:
-     enabled: false
+ # Optional auth via Caddy (disabled by default)
+ auth:
+   enabled: false
 
- persistence:
-   enabled: true
-   existingClaim: maven-pvc
-   mountPath: /app/data
+persistence:
+ enabled: true
+ existingClaim: maven-pvc
+ mountPath: /app/data
 
-# Blacklist node with label "kubernetes.io/hostname: home"
+env:
+ - name: REPOSILITE_OPTS
+   value: "--port 8000"
+ - name: JAVA_OPTS
+   value: "-Xmx128M"
+
 affinity:
   nodeAffinity:
     requiredDuringSchedulingIgnoredDuringExecution:
       nodeSelectorTerms:
         - matchExpressions:
-            - key: kubernetes.io/hostname
+            - key: home
               operator: NotIn
               values:
-                - home
-
- # Environment variables for Reposilite
- env:
-   - name: REPOSILITE_OPTS
-     value: "--port 8000"
-   - name: JAVA_OPTS
-     value: "-Xmx128M"
+                - "true"
