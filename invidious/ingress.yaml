@@ -110,7 +110,7 @@ data:
             #handle /watch {
             #  redir /watch https://iv2.duti.dev/watch/{query.v}
             #}
-            handle_path /companion/* {
+            handle /companion/* {
                 header companion "true"
                 reverse_proxy invidious-companion:8282
             }

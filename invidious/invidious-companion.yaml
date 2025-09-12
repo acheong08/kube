@@ -22,13 +22,15 @@ spec:
         home: "true"
       containers:
       - name: invidious-companion
-        image: ghcr.io/acheong08/invidious-companion:latest
+        image: quay.io/invidious/invidious-companion:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 8282
         env:
         - name: CONFIG_FILE
           value: /etc/invidious/config.toml
+        - name: SERVER_SECRET_KEY
+          value: aeb4queeShaeboh0
         volumeMounts:
         - name: config
           mountPath: /etc/invidious/config.toml
