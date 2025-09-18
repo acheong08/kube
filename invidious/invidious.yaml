@@ -21,7 +21,7 @@ spec:
       containers:
       - name: invidious
         image: ghcr.io/acheong08/invidious:neko
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         ports:
         - containerPort: 3000
         env:
