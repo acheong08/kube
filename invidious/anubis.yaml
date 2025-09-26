@@ -10,7 +10,7 @@ spec:
   replicas: 1
   strategy:
     rollingUpdate:
-      maxSurge: 1
+      maxSurge: 2
       maxUnavailable: 1
   template:
     metadata:
@@ -21,27 +21,19 @@ spec:
         ingress: "true"
       containers:
       - name: anubis
-        image: ghcr.io/techarohq/anubis:latest
+        image: git.gammaspectra.live/git/go-away:latest
         imagePullPolicy: IfNotPresent
         ports:
-        - containerPort: 8923
+        - containerPort: 8080
         env:
-        - name: TARGET
-          value: http://caddy:80
-        - name: BIND
-          value: ":8923"
-        - name: COOKIE_DOMAIN
-          value: iv.duti.dev
-        - name: SERVE_ROBOTS_TXT
-          value: "true"
-        - name: OG_PASSTHROUGH
-          value: "true"
-        - name: POLICY_FNAME
-          value: /botPolicies.json
+        - name: GOAWAY_CLIENT_IP_HEADER
+          value: X-Forwarded-For
+        - name: GOAWAY_BACKEND
+          value: "iv.duti.dev=http://caddy:80"
         volumeMounts:
         - name: bot-policies
-          mountPath: /botPolicies.json
-          subPath: botPolicies.json
+          mountPath: /policy.yml
+          subPath: policy.yml
       volumes:
       - name: bot-policies
         configMap:
@@ -59,7 +51,7 @@ spec:
   ports:
   - protocol: TCP
     port: 80
-    targetPort: 8923
+    targetPort: 8080
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -67,5 +59,30 @@ metadata:
   name: anubis-bot-policies
   namespace: invidious
 data:
-  botPolicies.json: |
-    {"bots":[{"name":"catch-all-challenge","path_regex":".*","action":"CHALLENGE"}]}
+  policy.yml: |
+    challenges:
+      js-pow-sha256:
+        runtime: js
+        duration: 24h
+        parameters:
+          path: "js-pow-sha256"
+          js-loader: load.mjs
+          wasm-runtime: runtime.wasm
+          wasm-runtime-settings:
+            difficulty: 10
+          verify-probability: 0.02
+    rules:
+      - name: allow companion
+        conditions:
+          - 'path.startsWith("/companion/")'
+        action: pass
+      - name: block-non-browsers
+        conditions:
+          - '!userAgent.matches("Mozilla/")'
+        action: deny
+      - name: verify-everything
+        conditions:
+          - 'path.startsWith("/")'
+        action: challenge
+        settings:
+          challenges: ["js-pow-sha256"]

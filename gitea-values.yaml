@@ -41,16 +41,17 @@ redis-cluster:
 redis:
   enabled: true
 
+persistence:
+  enabled: true
+  size: 13Gi
+
+
 affinity:
   nodeAffinity:
     requiredDuringSchedulingIgnoredDuringExecution:
       nodeSelectorTerms:
         - matchExpressions:
-            - key: home
-              operator: NotIn
+            - key: powerful
+              operator: In
               values:
                 - "true"
-            - key: cloud
-              operator: NotIn
-              values:
-                - "do"

@@ -13,21 +13,14 @@ spec:
   - host: iv.duti.dev
     http:
       paths:
-      - path: /watch
-        pathType: Prefix
-        backend:
-          service:
-            name: anubis
-            port:
-              number: 80
-      - path: /.within.website/
-        pathType: Prefix
-        backend:
-          service:
-            name: anubis
-            port:
-              number: 80
       - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: anubis
+            port:
+              number: 80
+      - path: /fonts/
         pathType: Prefix
         backend:
           service:
@@ -55,7 +48,7 @@ spec:
         app: caddy
     spec:
       nodeSelector:
-        home: "true"
+        ingress: "true"
       containers:
       - name: caddy
         image: caddy:latest
