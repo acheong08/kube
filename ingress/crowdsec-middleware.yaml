@@ -11,4 +11,4 @@ spec:
             crowdsecLapiHost: crowdsec-service.crowdsec.svc.cluster.local:8080
             # LogLevel: DEBUG
             crowdsecLapiScheme: http
-            crowdsecLapiKey: Fp7nGjyQXTzNPCjO2f6Z0rIHcZ/cb9bGB25KwdDBTsQ
+            crowdsecLapiKey: Yj0co93Zxw/3HIB/Ekm8ZmxsCnJsVOxe/vYPw5AIE8E

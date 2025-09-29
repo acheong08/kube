@@ -1,25 +1,26 @@
-experimental:
-  plugins:
-    bouncer:
-      moduleName: "github.com/maxlerebourg/crowdsec-bouncer-traefik-plugin"
-      version: "v1.3.0"
-additionalArguments:
-  - "--entrypoints.web.http.middlewares=kube-system-bouncer@kubernetescrd"
-  - "--entrypoints.websecure.http.middlewares=kube-system-bouncer@kubernetescrd"
-  - "--providers.kubernetescrd"
+# experimental:
+#   plugins:
+#     bouncer:
+#       moduleName: "github.com/maxlerebourg/crowdsec-bouncer-traefik-plugin"
+#       version: "v1.3.0"
+# additionalArguments:
+#   - "--entrypoints.web.http.middlewares=kube-system-bouncer@kubernetescrd"
+#   - "--entrypoints.websecure.http.middlewares=kube-system-bouncer@kubernetescrd"
+#   - "--entryPoints.websecure.http.tls=true"
+#   - "--providers.kubernetescrd"
 deployment:
-  kind: Deployment
+  kind: DaemonSet
   ports:
-  web:
-    forwardedHeaders:
-      insecure: true
-    proxyProtocol:
-      insecure: true
-  websecure:
-    forwardedHeaders:
-      insecure: true
-    proxyProtocol:
-      insecure: true
+    web:
+      forwardedHeaders:
+        insecure: true
+      proxyProtocol:
+        insecure: true
+    websecure:
+      forwardedHeaders:
+        insecure: true
+      proxyProtocol:
+        insecure: true
   hostNetwork: true
 nodeSelector:
   ingress: "true"
