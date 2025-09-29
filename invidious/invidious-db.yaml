@@ -33,10 +33,13 @@ spec:
         residential: "true"
       containers:
         - name: invidious-db
-          image: docker.io/library/postgres:17
+          image: docker.io/library/postgres:14
           ports:
             - containerPort: 5432
               name: postgres
+          args:
+            - -c
+            - max_connections=1000
           env:
             - name: POSTGRES_DB
               value: invidious

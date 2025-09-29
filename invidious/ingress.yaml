@@ -1,36 +1,70 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
+  name: invidious-ingress-iv
+  namespace: invidious
+  labels:
+    app: invidious
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-production
     spec.ingressClassName: traefik
-  labels:
-    app: invidious
-  name: invidious-ingress
-  namespace: invidious
 spec:
   rules:
-  - host: iv.duti.dev
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: anubis
-            port:
-              number: 80
-      - path: /fonts/
-        pathType: Prefix
-        backend:
-          service:
-            name: caddy
-            port:
-              number: 80
+    - host: iv.duti.dev
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: anubis
+                port:
+                  number: 80
+          - path: /fonts/
+            pathType: Prefix
+            backend:
+              service:
+                name: caddy
+                port:
+                  number: 80
+          - path: /companion/
+            pathType: Prefix
+            backend:
+              service:
+                name: caddy
+                port:
+                  number: 80
   tls:
-  - hosts:
-    - iv.duti.dev
-    secretName: invidious-tls
+    - hosts:
+        - iv.duti.dev
+      secretName: invidious-tls
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: invidious-ingress-poketube
+  namespace: invidious
+  labels:
+    app: invidious
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-production
+    spec.ingressClassName: traefik
+spec:
+  rules:
+    - host: poketube.duti.dev
+      http:
+        paths:
+          - path: /api/v1/videos/
+            pathType: Prefix
+            backend:
+              service:
+                name: anubis
+                port:
+                  number: 80
+  tls:
+    - hosts:
+        - poketube.duti.dev
+      secretName: poketube-tls
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -48,7 +82,7 @@ spec:
         app: caddy
     spec:
       nodeSelector:
-        ingress: "true"
+        home: "true"
       containers:
       - name: caddy
         image: caddy:latest
@@ -90,9 +124,9 @@ data:
             #     path /.within.website/*
             #     path /robots.txt
             # }
-            handle @api-blocked {
-                respond "API disabled due to abuse" 418
-            }
+            # handle @api-blocked {
+            #     respond "API disabled due to abuse" 418
+            # }
             handle @proxy-routes {
                 header yt-proxy "true"
                 reverse_proxy yt-proxy:8080

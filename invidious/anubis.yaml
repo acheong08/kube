@@ -18,7 +18,7 @@ spec:
         app: anubis
     spec:
       nodeSelector:
-        ingress: "true"
+        home: "true"
       containers:
       - name: anubis
         image: git.gammaspectra.live/git/go-away:latest
@@ -29,7 +29,7 @@ spec:
         - name: GOAWAY_CLIENT_IP_HEADER
           value: X-Forwarded-For
         - name: GOAWAY_BACKEND
-          value: "iv.duti.dev=http://caddy:80"
+          value: "*.duti.dev=http://caddy:80"
         volumeMounts:
         - name: bot-policies
           mountPath: /policy.yml
@@ -69,12 +69,16 @@ data:
           js-loader: load.mjs
           wasm-runtime: runtime.wasm
           wasm-runtime-settings:
-            difficulty: 10
+            difficulty: 18
           verify-probability: 0.02
     rules:
       - name: allow companion
         conditions:
           - 'path.startsWith("/companion/")'
+        action: pass
+      - name: allow poke
+        conditions:
+          - 'userAgent.startsWith("POKESERVICES")'
         action: pass
       - name: block-non-browsers
         conditions:
