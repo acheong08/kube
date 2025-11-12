@@ -8,7 +8,7 @@
  image:
    repository: ghcr.io/acheong08/super-productivity
    tag: master
-   pullPolicy: IfNotPresent
+   pullPolicy: Always
 
  service:
    type: ClusterIP

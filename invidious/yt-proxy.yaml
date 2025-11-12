@@ -4,7 +4,7 @@ metadata:
   name: yt-proxy
   namespace: invidious
 spec:
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
       app: yt-proxy

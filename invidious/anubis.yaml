@@ -18,6 +18,7 @@ spec:
         app: anubis
     spec:
       nodeSelector:
+        kubernetes.io/arch: amd64
         home: "true"
       containers:
       - name: anubis
@@ -72,21 +73,26 @@ data:
             difficulty: 18
           verify-probability: 0.02
     rules:
-      - name: allow companion
-        conditions:
-          - 'path.startsWith("/companion/")'
-        action: pass
-      - name: allow poke
+      - name: whitelist
         conditions:
           - 'userAgent.startsWith("POKESERVICES")'
+          - 'path.startsWith("/companion/")'
         action: pass
       - name: block-non-browsers
         conditions:
           - '!userAgent.matches("Mozilla/")'
+          - 'userAgent.matches("X11; CrOS")'
+          - 'path.startsWith("/api/v1/videos/")'
         action: deny
       - name: verify-everything
         conditions:
-          - 'path.startsWith("/")'
+          - 'path.startsWith("/feed/")'
+          - 'path == "/watch"'
+          - 'path.startsWith("/channel/")'
+          - 'path.startsWith("/hashtag/")'
+          - 'path.startsWith("/post/")'
+          - 'path.startsWith("/api/v1/")'
+          - 'path.startsWith("/vi/")'
         action: challenge
         settings:
           challenges: ["js-pow-sha256"]

@@ -13,13 +13,6 @@ spec:
     - host: iv.duti.dev
       http:
         paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: anubis
-                port:
-                  number: 80
           - path: /fonts/
             pathType: Prefix
             backend:
@@ -31,7 +24,14 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: caddy
+                name: invidious-companion
+                port:
+                  number: 8282
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: anubis
                 port:
                   number: 80
   tls:
@@ -107,13 +107,17 @@ metadata:
 data:
   Caddyfile: |
     :80 {
+        log {
+          output stdout
+          format json
+        }
         route {
             header {
               -Content-Security-Policy
               Content-Security-Policy "default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; manifest-src 'self'; media-src 'self' blob: https://*.googlevideo.com:443 https://*.youtube.com:443; child-src 'self' blob:; frame-src 'self'; frame-ancestors 'none'"
             }
             @proxy-routes {
-              expression `path_regexp('^/(vi/|vi_webp/|sb/|ggpht/|a/|ytc/|videoplayback)')`
+              expression `path_regexp('^/(vi/|vi_webp/|sb/|ggpht/|a/|ytc/)')`
             }
             @api-blocked {
                 path /api/v1/videos/*
