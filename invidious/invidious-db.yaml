@@ -30,7 +30,7 @@ spec:
         app: invidious-db
     spec:
       nodeSelector:
-        residential: "true"
+        powerful: "true"
       containers:
         - name: invidious-db
           image: docker.io/library/postgres:14

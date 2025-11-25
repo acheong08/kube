@@ -23,7 +23,7 @@ spec:
         powerful: "true"
       containers:
       - name: invidious-companion
-        image: ghcr.io/acheong08/invidious-companion:latest
+        image: quay.io/invidious/invidious-companion:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 8282
