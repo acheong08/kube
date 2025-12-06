@@ -19,8 +19,7 @@ spec:
         app: invidious-companion
     spec:
       nodeSelector:
-        home: "true"
-        powerful: "true"
+        residential: "true"
       containers:
       - name: invidious-companion
         image: quay.io/invidious/invidious-companion:latest
