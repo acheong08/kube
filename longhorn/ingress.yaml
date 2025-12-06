@@ -37,7 +37,7 @@ data:
             basic_auth {
                 kube "{env.PASSWORD_HASH}"
             }
-            reverse_proxy longhorn-frontend:80
+            reverse_proxy longhorn-frontend:8000
         }
     }
 ---

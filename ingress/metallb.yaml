@@ -6,7 +6,7 @@ metadata:
 spec:
   addresses:
   - 2.58.53.183/32
-  - 192.168.122.214/32
+  - 100.64.0.18/32
 
 ---
 apiVersion: metallb.io/v1beta1

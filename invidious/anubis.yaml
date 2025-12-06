@@ -73,11 +73,6 @@ data:
             difficulty: 18
           verify-probability: 0.02
     rules:
-      - name: whitelist
-        conditions:
-          - 'userAgent.startsWith("POKESERVICES")'
-          - 'path.startsWith("/companion/")'
-        action: pass
       - name: block-non-browsers
         conditions:
           - '!userAgent.matches("Mozilla/")'
@@ -93,6 +88,7 @@ data:
           - 'path.startsWith("/post/")'
           - 'path.startsWith("/api/v1/")'
           - 'path.startsWith("/vi/")'
+          - 'path == "/companion/latest_version"'
         action: challenge
         settings:
           challenges: ["js-pow-sha256"]

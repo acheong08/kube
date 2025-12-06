@@ -6,8 +6,8 @@
  replicaCount: 1
 
  image:
-   repository: ghcr.io/acheong08/super-productivity
-   tag: master
+   repository: docker.io/johannesjo/super-productivity
+   tag: latest
    pullPolicy: Always
 
  service:

@@ -10,18 +10,24 @@
 #   - "--providers.kubernetescrd"
 deployment:
   kind: DaemonSet
-  ports:
-    web:
-      forwardedHeaders:
-        insecure: true
-      proxyProtocol:
-        insecure: true
-    websecure:
-      forwardedHeaders:
-        insecure: true
-      proxyProtocol:
-        insecure: true
-  hostNetwork: true
+updateStrategy:
+  rollingUpdate:
+    maxUnavailable: 2
+    maxSurge: 0
+ports:
+  websecure:
+    port: 8444
+    exposedPort: 443
+    forwardedHeaders:
+      insecure: true
+    proxyProtocol:
+      insecure: true
+  web:
+    forwardedHeaders:
+      insecure: true
+    proxyProtocol:
+      insecure: true
+hostNetwork: true
 nodeSelector:
   ingress: "true"
 logs:

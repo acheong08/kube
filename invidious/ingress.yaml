@@ -20,6 +20,13 @@ spec:
                 name: caddy
                 port:
                   number: 80
+          - path: /companion/latest_version
+            pathType: Exact
+            backend:
+              service:
+                name: anubis
+                port:
+                  number: 80
           - path: /fonts/
             pathType: Prefix
             backend:
