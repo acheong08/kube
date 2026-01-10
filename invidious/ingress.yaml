@@ -197,6 +197,12 @@ data:
                 header companion "true"
                 reverse_proxy invidious-companion:8282
             }
+            handle /sabr/* {
+                reverse_proxy sabr:80
+            }
+            handle /watch {
+              redir /watch /sabr/watch/{query.v}
+            }
             handle /* {
                 reverse_proxy invidious:3000
             }

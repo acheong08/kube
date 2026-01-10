@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sabr
+  namespace: invidious
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sabr
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: sabr
+    spec:
+      nodeSelector:
+        public: "true"
+      containers:
+      - name: sabr
+        image: ghcr.io/acheong08/invidious-sabr-player:kira
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sabr
+  namespace: invidious
+spec:
+  type: ClusterIP
+  selector:
+    app: sabr
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
