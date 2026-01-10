@@ -19,7 +19,7 @@ spec:
     spec:
       nodeSelector:
         kubernetes.io/arch: amd64
-        home: "true"
+        public: "true"
       containers:
       - name: anubis
         image: ghcr.io/acheong08/go-away:latest

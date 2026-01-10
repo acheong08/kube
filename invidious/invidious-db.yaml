@@ -31,7 +31,6 @@ spec:
     spec:
       nodeSelector:
         powerful: "true"
-        stable: "true"
       containers:
         - name: invidious-db
           image: docker.io/library/postgres:18

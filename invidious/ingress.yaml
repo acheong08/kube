@@ -41,6 +41,13 @@ spec:
                 name: invidious-companion
                 port:
                   number: 8282
+          - path: /proxy/
+            pathType: Prefix
+            backend:
+              service:
+                name: caddy
+                port:
+                  number: 80
           - path: /
             pathType: Prefix
             backend:
@@ -52,33 +59,68 @@ spec:
     - hosts:
         - iv.duti.dev
       secretName: invidious-tls
-# ---
-# apiVersion: networking.k8s.io/v1
-# kind: Ingress
-# metadata:
-#   name: invidious-ingress-poketube
-#   namespace: invidious
-#   labels:
-#     app: invidious
-#   annotations:
-#     cert-manager.io/cluster-issuer: letsencrypt-production
-#     spec.ingressClassName: traefik
-# spec:
-#   rules:
-#     - host: poketube.duti.dev
-#       http:
-#         paths:
-#           - path: /api/v1/videos/
-#             pathType: Prefix
-#             backend:
-#               service:
-#                 name: anubis
-#                 port:
-#                   number: 80
-#   tls:
-#     - hosts:
-#         - poketube.duti.dev
-#       secretName: poketube-tls
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: invidious-ingress-poketube
+  namespace: invidious
+  labels:
+    app: invidious
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-production
+    spec.ingressClassName: traefik
+spec:
+  rules:
+    - host: poketube.duti.dev
+      http:
+        paths:
+          - path: /companion/videoplayback
+            pathType: Exact
+            backend:
+              service:
+                name: caddy
+                port:
+                  number: 80
+          - path: /proxy/
+            pathType: Prefix
+            backend:
+              service:
+                name: caddy
+                port:
+                  number: 80
+          - path: /companion/latest_version
+            pathType: Exact
+            backend:
+              service:
+                name: anubis
+                port:
+                  number: 80
+          - path: /fonts/
+            pathType: Prefix
+            backend:
+              service:
+                name: caddy
+                port:
+                  number: 80
+          - path: /companion/
+            pathType: Prefix
+            backend:
+              service:
+                name: invidious-companion
+                port:
+                  number: 8282
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: anubis
+                port:
+                  number: 80
+  tls:
+    - hosts:
+        - poketube.duti.dev
+      secretName: poketube-tls
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -96,7 +138,7 @@ spec:
         app: caddy
     spec:
       nodeSelector:
-        home: "true"
+        public: "true"
       containers:
       - name: caddy
         image: caddy:latest
@@ -134,8 +176,12 @@ data:
               expression `path_regexp('^/(vi/|vi_webp/|sb/|ggpht/|a/|ytc/)')`
             }
             @api-blocked {
-                path /api/v1/videos/*
-                path /api/v1/channels/*
+                path /api/v1/*
+                not expression `path_regexp('^/api/v1/(stats|comments|storyboard|annotations|auth)')`
+            }
+
+            handle @api-blocked {
+                respond "API endpoint blocked" 403
             }
 
             handle @proxy-routes {
