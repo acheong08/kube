@@ -84,6 +84,7 @@ data:
           - 'path.startsWith("/feed/")'
           - 'path.startsWith("/channel/")'
           - 'path.startsWith("/hashtag/")'
+          - 'path.startsWith("/watch/")'
           - 'path.startsWith("/post/")'
           - 'path.startsWith("/vi/")'
           - 'path == "/companion/latest_version"'
