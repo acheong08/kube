@@ -13,20 +13,6 @@ spec:
     - host: iv.duti.dev
       http:
         paths:
-          - path: /companion/videoplayback
-            pathType: Exact
-            backend:
-              service:
-                name: caddy
-                port:
-                  number: 80
-          - path: /companion/latest_version
-            pathType: Exact
-            backend:
-              service:
-                name: anubis
-                port:
-                  number: 80
           - path: /fonts/
             pathType: Prefix
             backend:
@@ -34,13 +20,6 @@ spec:
                 name: caddy
                 port:
                   number: 80
-          - path: /companion/
-            pathType: Prefix
-            backend:
-              service:
-                name: invidious-companion
-                port:
-                  number: 8282
           - path: /proxy/
             pathType: Prefix
             backend:
@@ -75,25 +54,11 @@ spec:
     - host: poketube.duti.dev
       http:
         paths:
-          - path: /companion/videoplayback
-            pathType: Exact
-            backend:
-              service:
-                name: caddy
-                port:
-                  number: 80
           - path: /proxy/
             pathType: Prefix
             backend:
               service:
                 name: caddy
-                port:
-                  number: 80
-          - path: /companion/latest_version
-            pathType: Exact
-            backend:
-              service:
-                name: anubis
                 port:
                   number: 80
           - path: /fonts/
@@ -103,13 +68,6 @@ spec:
                 name: caddy
                 port:
                   number: 80
-          - path: /companion/
-            pathType: Prefix
-            backend:
-              service:
-                name: invidious-companion
-                port:
-                  number: 8282
           - path: /
             pathType: Prefix
             backend:
@@ -188,20 +146,11 @@ data:
                 header yt-proxy "true"
                 reverse_proxy yt-proxy:8080
             }
-            handle /companion/videoplayback {
-                header yt "proxy"
-                uri strip_prefix /companion
-                reverse_proxy yt-proxy:8080
-            }
-            handle /companion/* {
-                header companion "true"
-                reverse_proxy invidious-companion:8282
-            }
             handle /sabr/* {
                 reverse_proxy sabr:80
             }
             handle /watch {
-              redir /watch /sabr/watch/{query.v}
+                redir /watch /sabr/watch/{query.v}
             }
             handle /* {
                 reverse_proxy invidious:3000

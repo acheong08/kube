@@ -82,11 +82,9 @@ data:
       - name: verify-everything
         conditions:
           - 'path.startsWith("/feed/")'
-          - 'path == "/watch"'
           - 'path.startsWith("/channel/")'
           - 'path.startsWith("/hashtag/")'
           - 'path.startsWith("/post/")'
-          - 'path.startsWith("/api/v1/")'
           - 'path.startsWith("/vi/")'
           - 'path == "/companion/latest_version"'
         action: challenge

@@ -22,7 +22,7 @@ spec:
       containers:
       - name: yt-proxy
         image: ghcr.io/acheong08/http3-ytproxy:latest
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         ports:
         - containerPort: 8080
 ---
