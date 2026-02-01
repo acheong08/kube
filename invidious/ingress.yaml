@@ -204,9 +204,9 @@ data:
                 path /watch
                 query v=*
             }
-            handle @sabr_path {
-                reverse_proxy sabr:80
-            }
+            #handle @sabr_path {
+            #    reverse_proxy sabr:80
+            #}
             #@watch-path-id path_regexp watch_id ^/watch/([a-zA-Z0-9_-]+)
             #handle @watch-path-id {
             #    rewrite /watch?v={re.watch_id.1}

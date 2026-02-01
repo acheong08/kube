@@ -16,7 +16,7 @@ spec:
     spec:
       nodeSelector:
         kubernetes.io/arch: amd64
-        powerful: "true"
+        public: "true"
       enableServiceLinks: false
       containers:
       - name: invidious

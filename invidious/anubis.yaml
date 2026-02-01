@@ -78,6 +78,7 @@ data:
           - '!userAgent.matches("Mozilla/")'
           - 'userAgent.matches("X11; CrOS")'
           - 'path.startsWith("/api/v1/videos/")'
+          - 'userAgent != "Mozilla/5.0 (X11; Linux x86_64; rv:146.0) Gecko/20100101 Firefox/146.0"'
         action: deny
       - name: verify-everything
         conditions:
