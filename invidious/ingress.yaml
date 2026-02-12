@@ -184,6 +184,11 @@ data:
                 respond "API endpoint blocked" 403
             }
 
+            handle /supersecretlink {
+                header +Set-Cookie "ImAHuman=true"
+                redir /supersecretlink / 301
+            }
+
             handle @proxy-routes {
                 header yt-proxy "true"
                 reverse_proxy yt-proxy:8080
