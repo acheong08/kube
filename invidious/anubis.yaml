@@ -77,6 +77,7 @@ data:
         conditions:
           - 'userAgent == "Mozilla/5.0 (X11; Linux x86_64; rv:147.0) Gecko/20100101 Firefox/147.0"'
           - 'userAgent == "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:147.0) Gecko/20100101 Firefox/147.0"'
+          - 'userAgent == "Mozilla/5.0 (iPhone; CPU iPhone OS 18_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko)"'
         action: pass
       - name: allow-webhook
         conditions:
