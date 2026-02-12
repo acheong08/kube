@@ -75,20 +75,14 @@ data:
     rules:
       - name: block-non-browsers
         conditions:
-          - '!userAgent.matches("Mozilla/")'
-          - 'userAgent.matches("X11; CrOS")'
-          - 'path.startsWith("/api/v1/videos/")'
-          - 'userAgent != "Mozilla/5.0 (X11; Linux x86_64; rv:146.0) Gecko/20100101 Firefox/146.0"'
-        action: deny
-      - name: verify-everything
+          - 'userAgent == "Mozilla/5.0 (X11; Linux x86_64; rv:147.0) Gecko/20100101 Firefox/147.0"'
+          - 'userAgent == "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:147.0) Gecko/20100101 Firefox/147.0"'
+        action: pass
+      - name: allow-webhook
         conditions:
-          - 'path.startsWith("/feed/")'
-          - 'path.startsWith("/channel/")'
-          - 'path.startsWith("/hashtag/")'
-          - 'path.startsWith("/watch")'
-          - 'path.startsWith("/post/")'
-          - 'path.startsWith("/vi/")'
-          - 'path == "/companion/latest_version"'
-        action: challenge
-        settings:
-          challenges: ["js-pow-sha256"]
+          - 'path == "/feed/webhook/v1"'
+        action: pass
+      - name: block-everyone
+        conditions:
+          - 'path.startsWith("/")'
+        action: block
