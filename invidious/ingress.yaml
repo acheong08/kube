@@ -138,7 +138,7 @@ spec:
         app: caddy
     spec:
       nodeSelector:
-        public: "true"
+        powerful: "true"
       containers:
       - name: caddy
         image: caddy:latest

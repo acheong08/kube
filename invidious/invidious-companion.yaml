@@ -19,7 +19,7 @@ spec:
         app: invidious-companion
     spec:
       nodeSelector:
-        public: "true"
+        powerful: "true"
       containers:
       - name: invidious-companion
         image: quay.io/invidious/invidious-companion:latest
@@ -29,8 +29,6 @@ spec:
         env:
         - name: CONFIG_FILE
           value: /etc/invidious/config.toml
-        - name: SERVER_SECRET_KEY
-          value: aeb4queeShaeboh0
         volumeMounts:
         - name: config
           mountPath: /etc/invidious/config.toml
