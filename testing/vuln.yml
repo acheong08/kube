@@ -1,6 +1,0 @@
-ingress:
-  enabled: true
-  hosts:
-  - host: testing.duti.dev
-    paths:
-      - path: /

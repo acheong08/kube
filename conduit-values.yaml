@@ -8,10 +8,6 @@ affinity:
     requiredDuringSchedulingIgnoredDuringExecution:
       nodeSelectorTerms:
         - matchExpressions:
-            - key: disk
-              operator: NotIn
-              values:
-                - "sd"
             - key: powerful
               operator: In
               values:
