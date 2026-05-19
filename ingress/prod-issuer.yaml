@@ -11,6 +11,8 @@ spec:
       name: letsencrypt-production
     solvers:
     - selector: {}
-      http01:
-        ingress:
-          class: traefik
+      dns01:
+        cloudflare:
+          apiTokenSecretRef:
+            name: cloudflare-api-key
+            key: apiKey
