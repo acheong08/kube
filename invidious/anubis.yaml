@@ -18,8 +18,8 @@ spec:
         app: anubis
     spec:
       nodeSelector:
+        capability.duti.dev/performance: high
         kubernetes.io/arch: amd64
-        powerful: "true"
       containers:
       - name: anubis
         image: ghcr.io/acheong08/go-away:latest

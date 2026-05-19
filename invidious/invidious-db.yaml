@@ -30,7 +30,7 @@ spec:
         app: invidious-db
     spec:
       nodeSelector:
-        powerful: "true"
+        capability.duti.dev/performance: high
       containers:
         - name: invidious-db
           image: docker.io/library/postgres:18

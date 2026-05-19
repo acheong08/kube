@@ -29,7 +29,7 @@ ports:
       insecure: true
 hostNetwork: true
 nodeSelector:
-  ingress: "true"
+  node-role.duti.dev/ingress: "true"
 logs:
   access:
     enabled: true

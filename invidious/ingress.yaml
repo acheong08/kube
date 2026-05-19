@@ -138,7 +138,7 @@ spec:
         app: caddy
     spec:
       nodeSelector:
-        powerful: "true"
+        capability.duti.dev/performance: high
       containers:
       - name: caddy
         image: caddy:latest

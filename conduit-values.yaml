@@ -8,10 +8,10 @@ affinity:
     requiredDuringSchedulingIgnoredDuringExecution:
       nodeSelectorTerms:
         - matchExpressions:
-            - key: powerful
+            - key: capability.duti.dev/performance
               operator: In
               values:
-                - "true"
+                - "high"
 
 replicaCount: 1
 strategy:

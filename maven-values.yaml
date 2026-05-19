@@ -39,13 +39,3 @@ env:
    value: "--port 8000"
  - name: JAVA_OPTS
    value: "-Xmx128M"
-
-affinity:
-  nodeAffinity:
-    requiredDuringSchedulingIgnoredDuringExecution:
-      nodeSelectorTerms:
-        - matchExpressions:
-            - key: home
-              operator: NotIn
-              values:
-                - "true"
