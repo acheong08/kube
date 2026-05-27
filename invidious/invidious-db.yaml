@@ -29,8 +29,6 @@ spec:
       labels:
         app: invidious-db
     spec:
-      nodeSelector:
-        capability.duti.dev/performance: high
       containers:
         - name: invidious-db
           image: docker.io/library/postgres:18

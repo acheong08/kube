@@ -17,8 +17,6 @@ spec:
       labels:
         app: yt-proxy
     spec:
-      nodeSelector:
-        capability.duti.dev/performance: high
       containers:
       - name: yt-proxy
         image: ghcr.io/acheong08/http3-ytproxy:latest

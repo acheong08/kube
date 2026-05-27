@@ -15,7 +15,6 @@ spec:
         app: invidious
     spec:
       nodeSelector:
-        capability.duti.dev/performance: high
         kubernetes.io/arch: amd64
       enableServiceLinks: false
       containers:

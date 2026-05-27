@@ -18,8 +18,6 @@ spec:
       labels:
         app: invidious-companion
     spec:
-      nodeSelector:
-        capability.duti.dev/performance: high
       containers:
       - name: invidious-companion
         image: ghcr.io/acheong08/invidious-companion:latest
